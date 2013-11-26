@@ -10,10 +10,9 @@ var options = {
 
 function pushedFile(element) {
   console.log(process.env.WERCKER_GIT_COMMIT);
-  var re = new RegExp("/.*" + process.env.WERCKER_GIT_COMMIT + ".*/", '');
   console.log(element);
-  console.log(element.match(re));
-  return element.match(re);
+  console.log(element.indexOf(process.env.WERCKER_GIT_COMMIT) >= 0);
+  return element.indexOf(process.env.WERCKER_GIT_COMMIT) >= 0;
 }
 
 var req = https.request(options, function(res) {
