@@ -25,7 +25,7 @@ var req = https.request(options, function(res) {
   var update = {};
   update.files = files.filter(pushedFile);
   for (i in update.files) {
-    update.files[i] = update.files[i].replace(__dirname, '');
+    update.files[i] = 'http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, '');
   }
   update.container = process.env.CLOUDFILES_CONTAINER;
   var updateoptions = {
