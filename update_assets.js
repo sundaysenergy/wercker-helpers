@@ -9,7 +9,8 @@ var options = {
 };
 
 function pushedFile(element) {
-  return element.match(process.env.TIMESTAMP);
+  var re = new RegExp(process.env.TIMESTAMP, 'g');
+  return element.match(re);
 }
 
 var req = https.request(options, function(res) {
