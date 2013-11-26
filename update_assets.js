@@ -11,6 +11,8 @@ var options = {
 function pushedFile(element) {
   console.log(process.env.WERCKER_GIT_COMMIT);
   var re = new RegExp("/.*" + process.env.WERCKER_GIT_COMMIT + ".*/", '');
+  console.log(element);
+  console.log(element.match(re));
   return element.match(re);
 }
 
