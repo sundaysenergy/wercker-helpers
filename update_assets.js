@@ -9,7 +9,8 @@ var options = {
 };
 
 function pushedFile(element) {
-  var re = new RegExp(process.env.TIMESTAMP, 'g');
+  console.log(process.env.WERCKER_GIT_COMMIT);
+  var re = new RegExp("/.*" + process.env.WERCKER_GIT_COMMIT + ".*/", '');
   return element.match(re);
 }
 
