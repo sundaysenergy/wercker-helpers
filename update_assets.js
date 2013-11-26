@@ -9,7 +9,7 @@ var options = {
 };
 
 function pushedFile(element) {
-  return element.match(/(\.css|\.js)/);
+  return element.match(process.env.TIMESTAMP);
 }
 
 var req = https.request(options, function(res) {
