@@ -28,9 +28,9 @@ var req = https.request(options, function(res) {
   update.js = [];
   update.other = [];
   for (i in update.files) {
-    if (update.files[i].indexOf('.js') >= 0) {
+    if ((update.files[i].indexOf('.js') + 3) == update.files[i].length) {
       update.js.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
-    } else if (update.files[i].indexOf('.css') >= 0) {
+    } else if ((update.files[i].indexOf('.css') + 4) == update.files[i].length) {
       update.css.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
     } else {
       update.other.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
