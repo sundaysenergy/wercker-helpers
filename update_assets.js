@@ -9,9 +9,6 @@ var options = {
 };
 
 function pushedFile(element) {
-  console.log(process.env.WERCKER_GIT_COMMIT);
-  console.log(element);
-  console.log(element.indexOf(process.env.WERCKER_GIT_COMMIT) >= 0);
   return element.indexOf(process.env.WERCKER_GIT_COMMIT) >= 0;
 }
 
