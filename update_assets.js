@@ -24,8 +24,17 @@ var req = https.request(options, function(res) {
   var files = require('findit2').sync(__dirname);
   var update = {};
   update.files = files.filter(pushedFile);
+  update.css = [];
+  update.js = [];
+  update.other = [];
   for (i in update.files) {
-    update.files[i] = 'http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, '');
+    if (update.files[i].indexOf('.js') >= 0) {
+      update.js.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
+    } else if (update.files[i].indexOf('.css') >= 0) {
+      update.css.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
+    } else {
+      update.other.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
+    }
   }
   update.container = process.env.CLOUDFILES_CONTAINER;
   var updateoptions = {
