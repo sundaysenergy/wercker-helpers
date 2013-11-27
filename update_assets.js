@@ -1,5 +1,6 @@
 var https = require('https');
 
+// Options for connecting to Cloudant
 var options = {
   hostname: process.env.CLOUDANT_URL,
   port: 443,
@@ -8,10 +9,12 @@ var options = {
   auth: process.env.CLOUDANT_AUTH
 };
 
+// Helper function for filtering by current hash
 function pushedFile(element) {
   return element.indexOf(process.env.WERCKER_GIT_COMMIT) >= 0;
 }
 
+// Send a request updating Cloudant with our latest information
 var req = https.request(options, function(res) {
   var rev = res.headers.etag;
   var path = process.env.CLOUDANT_PATH;

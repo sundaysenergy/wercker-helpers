@@ -15,6 +15,8 @@
   },
   "dependencies" : {
     "findit2" : "0.x",
-    "pkgcloud" : "0.x"
+    "pkgcloud" : "0.x",
+    "less" : "1.x",
+    "js-yaml" : "2.x"
   }
 }
