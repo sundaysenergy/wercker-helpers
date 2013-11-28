@@ -47,7 +47,7 @@ var req = https.request(options, function(res) {
       update.collection[key].js = '';
       update.collection[key].css = '';
       if (fs.existsSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js')) {
-        client.upload({
+        cloudfiles.upload({
           container: process.env.CLOUDFILES_CONTAINER,
           remote: '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js',
           local: process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js'
@@ -57,7 +57,7 @@ var req = https.request(options, function(res) {
         update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js';
       }
       if (fs.existsSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css')) {
-        client.upload({
+        cloudfiles.upload({
           container: process.env.CLOUDFILES_CONTAINER,
           remote: '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css',
           local: process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css'
