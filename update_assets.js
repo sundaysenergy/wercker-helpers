@@ -13,6 +13,10 @@ var options = {
   auth: process.env.CLOUDANT_AUTH
 };
 
+function inCollection(element) {
+  return element.indexOf(process.env.WERCKER_GIT_COMMIT + '/' + element) >= 0;
+}
+
 // Send a request updating Cloudant with our latest information
 var req = https.request(options, function(res) {
   var rev = res.headers.etag;
@@ -26,44 +30,43 @@ var req = https.request(options, function(res) {
   });
 
   var update = {};
+  update.collection = {};
   // Process each key in collection.yml
   for (var i in doc) {
     (function(collection) {
-      var files = require('findit2').sync(__dirname + '/' + process.env.WERCKER_GIT_COMMIT + '/' + collection);
-      console.log(files);
+      var files = require('findit2').sync(__dirname);
+      files = files.filter(inCollection(collection));
 
-      // for (i in update.files) {
-      //   if ((update.files[i].indexOf('.js') + 3) == update.files[i].length) {
-      //     update.js.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
-      //   } else if ((update.files[i].indexOf('.css') + 4) == update.files[i].length) {
-      //     update.css.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
-      //   } else {
-      //     update.other.push('http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, ''));
-      //   }
-      //   update.files[i] = 'http://' + process.env.CLOUDFILES_CONTAINER + update.files[i].replace(__dirname, '')
-      // }
+      for (j in files) {
+        update.collection[key] = { 'js':'', 'css':''};
+        if ((files[j].indexOf('.js') + 3) == files[j].length) {
+          update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, ''));
+        }
+        if ((files[j].indexOf('.css') + 4) == files[j].length) {
+          update.collection[key].css = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, ''));
+        }
+      }
     })(i);
   }
 
-
-  // update.container = process.env.CLOUDFILES_CONTAINER;
-  // var updateoptions = {
-  //   hostname: process.env.CLOUDANT_URL,
-  //   port: 443,
-  //   path: path,
-  //   method: 'PUT',
-  //   headers: { 
-  //               'Content-Type':'application/json', 
-  //               'Content-Length':JSON.stringify(update).length 
-  //            },
-  //   auth: process.env.CLOUDANT_AUTH
-  // }
-  // var updatereq = https.request(updateoptions, function(res) {
-  //   res.on('data', function (chunk) {
-  //     console.log('BODY: ' + chunk);
-  //   });
-  // });
-  // updatereq.write(JSON.stringify(update));
-  // updatereq.end();
+  update.container = process.env.CLOUDFILES_CONTAINER;
+  var updateoptions = {
+    hostname: process.env.CLOUDANT_URL,
+    port: 443,
+    path: path,
+    method: 'PUT',
+    headers: { 
+                'Content-Type':'application/json', 
+                'Content-Length':JSON.stringify(update).length 
+             },
+    auth: process.env.CLOUDANT_AUTH
+  }
+  var updatereq = https.request(updateoptions, function(res) {
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+  updatereq.write(JSON.stringify(update));
+  updatereq.end();
 });
 req.end();
