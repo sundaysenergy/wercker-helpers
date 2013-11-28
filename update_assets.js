@@ -1,5 +1,6 @@
 var https = require('https');
 var jsyaml = require('js-yaml');
+var fs = require('fs');
 
 // Read the yaml configuration file
 var doc = require(process.env.WERCKER_ROOT + '/collection.yml');
@@ -12,10 +13,6 @@ var options = {
   method: 'HEAD',
   auth: process.env.CLOUDANT_AUTH
 };
-
-function inCollection(element) {
-  return element.indexOf(process.env.WERCKER_GIT_COMMIT + '/' + element) >= 0;
-}
 
 // Send a request updating Cloudant with our latest information
 var req = https.request(options, function(res) {
@@ -33,18 +30,15 @@ var req = https.request(options, function(res) {
   update.collection = {};
   // Process each key in collection.yml
   for (var i in doc) {
-    (function(collection) {
-      var files = require('findit2').sync(__dirname);
-      files = files.filter(inCollection(collection));
-
-      for (j in files) {
-        update.collection[key] = { 'js':'', 'css':''};
-        if ((files[j].indexOf('.js') + 3) == files[j].length) {
-          update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, '');
-        }
-        if ((files[j].indexOf('.css') + 4) == files[j].length) {
-          update.collection[key].css = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, '');
-        }
+    (function(key) {
+      update.collection[key] = {};
+      update.collection[key].js = '';
+      update.collection[key].css = '';
+      if (fs.existsSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + collection + '.js') {
+        update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + '/' + process.env.WERCKER_GIT_COMMIT + '/' + collection + '.js';
+      }
+      if (fs.existsSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + collection + '.css') {
+        update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + '/' + process.env.WERCKER_GIT_COMMIT + '/' + collection + '.css';
       }
     })(i);
   }
