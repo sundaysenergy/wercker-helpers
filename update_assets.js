@@ -1,6 +1,7 @@
 var https = require('https');
 var jsyaml = require('js-yaml');
 var fs = require('fs');
+var pkgcloud = require('pkgcloud');
 
 // Read the yaml configuration file
 var doc = require(process.env.WERCKER_ROOT + '/collection.yml');
