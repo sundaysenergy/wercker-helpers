@@ -35,7 +35,8 @@ var req = https.request(options, function(res) {
   var cloudfiles = pkgcloud.storage.createClient({
     provider: 'rackspace',
     username: process.env.CLOUDFILES_USERNAME,
-    apiKey: process.env.CLOUDFILES_APIKEY
+    apiKey: process.env.CLOUDFILES_APIKEY,
+    region: 'ORD'
   });
 
   // Process each key in collection.yml
