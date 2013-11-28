@@ -28,6 +28,16 @@ var req = https.request(options, function(res) {
 
   var update = {};
   update.collection = {};
+  update.hash = process.env.WERCKER_GIT_COMMIT;
+  update.domain = process.env.CLOUDFILES_CONTAINER;
+
+  // Connect to cloudfiles -- make this provider inspecific in the future.
+  var cloudfiles = pkgcloud.storage.createClient({
+    provider: 'rackspace',
+    username: process.env.CLOUDFILES_USERNAME,
+    apiKey: process.env.CLOUDFILES_APIKEY
+  });
+
   // Process each key in collection.yml
   for (var i in doc) {
     (function(key) {
@@ -35,15 +45,28 @@ var req = https.request(options, function(res) {
       update.collection[key].js = '';
       update.collection[key].css = '';
       if (fs.existsSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js')) {
+        client.upload({
+          container: process.env.CLOUDFILES_CONTAINER,
+          remote: '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js',
+          local: process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js'
+        }, function(err, result) {
+          console.log(result);
+        });
         update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.js';
       }
       if (fs.existsSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css')) {
-        update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css';
+        client.upload({
+          container: process.env.CLOUDFILES_CONTAINER,
+          remote: '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css',
+          local: process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css'
+        }, function(err, result) {
+          console.log(result);
+        });
+        update.collection[key].css = 'http://' + process.env.CLOUDFILES_CONTAINER + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css';
       }
     })(i);
   }
 
-  update.container = process.env.CLOUDFILES_CONTAINER;
   var updateoptions = {
     hostname: process.env.CLOUDANT_URL,
     port: 443,
