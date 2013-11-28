@@ -40,10 +40,10 @@ var req = https.request(options, function(res) {
       for (j in files) {
         update.collection[key] = { 'js':'', 'css':''};
         if ((files[j].indexOf('.js') + 3) == files[j].length) {
-          update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, ''));
+          update.collection[key].js = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, '');
         }
         if ((files[j].indexOf('.css') + 4) == files[j].length) {
-          update.collection[key].css = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, ''));
+          update.collection[key].css = 'http://' + process.env.CLOUDFILES_CONTAINER + files[j].replace(__dirname, '');
         }
       }
     })(i);
