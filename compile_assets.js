@@ -1,6 +1,7 @@
 var jsyaml = require('js-yaml');
 var less = require('less');
 var fs = require('fs');
+var uglifyjs = require('uglify-js');
 
 // Make a directory based on the commit hash
 fs.mkdir(process.env.WERCKER_GIT_COMMIT);
@@ -15,10 +16,13 @@ for (var i in doc) {
       paths: [process.env.WERCKER_ROOT]
     });
     var files = [];
+    var jsfiles = [];
     // Push each file into an array as a string
     for (j in doc[current_page].css) {
       files.push(fs.readFileSync(process.env.WERCKER_ROOT + '/' + doc[current_page].css[j]).toString());
     }
+    var compressedjs = uglifyjs.minify(doc[current_page].js);
+    fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.js', compressedjs);
     // Parse the less and write a css file
     parser.parse(files.join(" "), function (e, tree) {
       var css = tree.toCSS({ compress: true });
