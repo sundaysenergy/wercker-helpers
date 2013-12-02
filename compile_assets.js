@@ -26,10 +26,12 @@ for (var i in doc) {
       var compressedjs = uglifyjs.minify(doc[current_page].js);
       fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.js', compressedjs.code);
     }
-    // Parse the less and write a css file
-    parser.parse(files.join(" "), function (e, tree) {
-      var css = tree.toCSS({ compress: true });
-      fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.css', css);
-    });
+    // Parse the less and write a css file if css files are present
+    if (doc[current_page].css.length > 0) {
+      parser.parse(files.join(" "), function (e, tree) {
+        var css = tree.toCSS({ compress: true });
+        fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.css', css);
+      });
+    }
   })(i);
 }
