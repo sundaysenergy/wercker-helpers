@@ -24,7 +24,7 @@ for (var i in doc) {
     if (doc[current_page].js.length > 0) {
       console.log(doc[current_page].js);
       var compressedjs = uglifyjs.minify(doc[current_page].js);
-      fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.js', compressedjs);
+      fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.js', compressedjs.code);
     }
     // Parse the less and write a css file
     parser.parse(files.join(" "), function (e, tree) {
