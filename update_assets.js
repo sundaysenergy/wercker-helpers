@@ -1,3 +1,4 @@
+/*** Helper for uploading theme assets and informing resources of update ***/
 var https = require('https');
 var jsyaml = require('js-yaml');
 var fs = require('fs');
@@ -69,6 +70,7 @@ var req = https.request(options, function(res) {
     })(i);
   }
 
+  // Tell cloudant about our new files
   var updateoptions = {
     hostname: process.env.CLOUDANT_URL,
     port: 443,
