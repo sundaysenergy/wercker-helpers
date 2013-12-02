@@ -18,6 +18,6 @@
     "pkgcloud" : "0.x",
     "less" : "1.x",
     "js-yaml" : "2.x",
-    "uglify-js" : "2.4.x"
+    "uglify-js" : "https://github.com/mishoo/UglifyJS2/tarball/master"
   }
 }
