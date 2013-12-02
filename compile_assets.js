@@ -1,3 +1,4 @@
+/*** Helper for compiling theme assets as a wercker step ***/
 var jsyaml = require('js-yaml');
 var less = require('less');
 var fs = require('fs');
