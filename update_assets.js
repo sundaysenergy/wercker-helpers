@@ -32,7 +32,8 @@ var req = https.request(options, function(res) {
   update.collection = {};
   update.hash = process.env.WERCKER_GIT_COMMIT;
   update.domain = process.env.CLOUDFILES_CONTAINER;
-
+  update._rev = rev.replace(/\"/g,'');
+  
   // Connect to cloudfiles -- make this provider inspecific in the future.
   var cloudfiles = pkgcloud.storage.createClient({
     provider: 'rackspace',
