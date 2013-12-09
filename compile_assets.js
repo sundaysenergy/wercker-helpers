@@ -22,7 +22,7 @@ for (var i in doc) {
     }
     // If we have .js files, compress and create a file
     if (doc[current_page].js.length > 0) {
-      var compressedjs = uglifyjs.minify(doc[current_page].js);
+      var compressedjs = uglifyjs.minify(doc[current_page].js, { mangle: false });
       fs.writeFileSync(process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + current_page + '.js', compressedjs.code);
     }
     // Parse the less and write a css file if css files are present
