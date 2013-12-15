@@ -72,6 +72,19 @@ var req = https.request(options, function(res) {
     })(i);
   }
 
+  var images = fs.readdirSync(process.env.WERCKER_ROOT + '/img/');
+
+  for (var i=0;i<images.length;i++) {
+    console.log(images[i]);
+    // cloudfiles.upload({
+    //   container: process.env.CLOUDFILES_CONTAINER,
+    //   remote: '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css',
+    //   local: process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css'
+    // }, function(err, result) {
+    //   console.log(result);
+    // });
+  }
+
   // Tell cloudant about our new files
   var updateoptions = {
     hostname: process.env.CLOUDANT_URL,
