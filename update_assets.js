@@ -76,13 +76,13 @@ var req = https.request(options, function(res) {
 
   for (var i=0;i<images.length;i++) {
     console.log(images[i]);
-    // cloudfiles.upload({
-    //   container: process.env.CLOUDFILES_CONTAINER,
-    //   remote: '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css',
-    //   local: process.env.WERCKER_ROOT + '/' + process.env.WERCKER_GIT_COMMIT + '/' + key + '.css'
-    // }, function(err, result) {
-    //   console.log(result);
-    // });
+    cloudfiles.upload({
+      container: process.env.CLOUDFILES_CONTAINER,
+      remote: '/' + process.env.WERCKER_GIT_COMMIT + '/img/' + images[i],
+      local: process.env.WERCKER_ROOT + '/img/' + images[i]
+    }, function(err, result) {
+      console.log(result);
+    });
   }
 
   // Tell cloudant about our new files
